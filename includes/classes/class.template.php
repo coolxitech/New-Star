@@ -15,9 +15,7 @@
  * @Basis New-Star: 2Moons v1.8.0
  */
 
-require('includes/libs/Smarty/Smarty.class.php');
-		
-class template extends Smarty
+#[AllowDynamicProperties] class template extends Smarty
 {
 	protected $window	= 'full';
 	public $jsscript	= array();
@@ -33,7 +31,24 @@ class template extends Smarty
 	{
         global $THEME;
         
-		$this->php_handling = Smarty::PHP_REMOVE;
+		$this->php_handling = -2;
+        $this->registerPlugin('modifier', 'htmlspecialchars', 'htmlspecialchars');
+        $this->registerPlugin('modifier', 'count', 'count');
+        $this->registerPlugin('modifier', 'json', 'json_encode');
+        $this->registerPlugin('modifier', 'pretty_fly_time', 'pretty_fly_time');
+        $this->registerPlugin('modifier', 'date', 'date');
+        $this->registerPlugin('modifier', 'pretty_time', 'pretty_time');
+        $this->registerPlugin('modifier', 'isModuleAvailable', 'isModuleAvailable');
+        $this->registerPlugin('modifier', 'number', 'number_format');
+        $this->registerPlugin('modifier', 'abs', 'abs');
+        $this->registerPlugin('modifier', 'shortly_number', 'shortly_number');
+        $this->registerPlugin('modifier', 'pretty_number', 'pretty_number');
+        $this->registerPlugin('modifier', 'min', 'min');
+        $this->registerPlugin('modifier', 'array_sum', 'array_sum');
+        $this->registerPlugin('modifier', 'floatval', 'floatval');
+        $this->registerPlugin('modifier', 'time', 'time');
+        $this->registerPlugin('modifier', 'strtotime', 'strtotime');
+        $this->registerPlugin('modifier', 'sqrt', 'sqrt');
 
 		$this->setForceCompile(false);
 		$this->setMergeCompiledIncludes(true);

@@ -23,7 +23,6 @@ $composerAutoloader = __DIR__.'/../vendor/autoload.php';
 
 //Lib for hook system
 require 'libs/hook/hook.php';
-
 if (file_exists($composerAutoloader)) {
     require $composerAutoloader;
 }

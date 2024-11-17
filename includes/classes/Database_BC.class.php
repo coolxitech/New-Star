@@ -56,20 +56,19 @@ class Database_BC extends mysqli
 	 *
 	 * @param string
 	 *
-	 * @return resource	Results of the query
+	 * @return bool|mysqli_result|Resource
 	 */
-	public function query($resource, $resultmode = NULL)
-	{
-		if($result = parent::query($resource))
-		{
-			$this->queryCount++;
-			return $result;
-		}
-		else
-		{
-			throw new Exception("SQL Error: ".$this->error."<br><br>Query Code: ".$resource);
-		}
-	}
+	public function query(string $query, int $result_mode = MYSQLI_STORE_RESULT): mysqli_result|bool
+    {
+        if ($result = parent::query($query, $result_mode)) {
+            $this->queryCount++;
+            return $result;
+        }
+
+        // 如果失败，抛出异常
+        throw new Exception("SQL Error: " . $this->error . "<br><br>Query Code: " . $query);
+    }
+
 
 	public function getFirstRow($resource)
 	{		
@@ -235,15 +234,14 @@ class Database_BC extends mysqli
 	 *
 	 * @return void
 	 */
-	public function free_result($resource)
-	{
+	public function free_result(mysqli_result $resource): void
+    {
         $resource->close();
-        return;
-	}
+    }
 	
-	public function multi_query($resource)
-	{
-		if(parent::multi_query($resource))
+	public function multi_query($query): bool
+    {
+		if(parent::multi_query($query))
 		{
 			do {
 			    if ($result = parent::store_result())
@@ -253,13 +251,17 @@ class Database_BC extends mysqli
 					
 				if(!parent::more_results()){break;}
 					
-			} while (parent::next_result());		
+			} while (parent::next_result());
+
+            return true;
 		}
 	
 		if ($this->errno)
 		{
-			throw new Exception("SQL Error: ".$this->error."<br><br>Query Code: ".$resource);
+			throw new Exception("SQL Error: ".$this->error."<br><br>Query Code: ".$query);
 		}
+
+        return false;
 	}
 	
 	public function get_sql()

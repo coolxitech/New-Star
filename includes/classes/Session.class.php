@@ -73,7 +73,10 @@ class Session
 
 	static public function getClientIp()
     {
-		if(!empty($_SERVER['HTTP_CLIENT_IP']))
+        if (!empty($_SERVER['x-real-ip'])) {
+            $ipAddress = $_SERVER['x-real-ip'];
+        }
+        elseif(!empty($_SERVER['HTTP_CLIENT_IP']))
         {
             $ipAddress = $_SERVER['HTTP_CLIENT_IP'];
         }

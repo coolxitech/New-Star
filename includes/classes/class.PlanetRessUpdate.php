@@ -15,7 +15,7 @@
  * @Basis New-Star: 2Moons v1.8.0
  */
 
-class ResourceUpdate
+#[AllowDynamicProperties] class ResourceUpdate
 {
 
 	/**
@@ -425,7 +425,7 @@ class ResourceUpdate
 	{
 		global $resource;
 
-		$BuildQueue 	= unserialize($this->PLANET['b_hangar_id']);
+		$BuildQueue 	= unserialize($this->PLANET['b_hangar_id'] ?? '');
 		if (!$BuildQueue) {
 			$this->PLANET['b_hangar'] = 0;
 			$this->PLANET['b_hangar_id'] = '';

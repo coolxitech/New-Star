@@ -92,8 +92,8 @@ class Language implements ArrayAccess {
 		$this->setLanguage($language);
     }
 	
-    public function setLanguage($language)
-	{
+    public function setLanguage($language): void
+    {
 		if(!is_null($language) && in_array($language, self::getAllowedLangs()))
 		{
 			$this->language = $language;
@@ -108,17 +108,18 @@ class Language implements ArrayAccess {
 		}
     }
 	
-    public function addData($data) {
+    public function addData($data): void
+    {
 		$this->container = array_replace_recursive($this->container, $data);
     }
 	
-	public function getLanguage()
-	{
+	public function getLanguage(): array|string
+    {
 		return $this->language;
 	}
 	
-	public function getTemplate($templateName)
-	{
+	public function getTemplate($templateName): false|string
+    {
 		if(file_exists('language/'.$this->getLanguage().'/templates/'.$templateName.'.txt'))
 		{
 			return file_get_contents('language/'.$this->getLanguage().'/templates/'.$templateName.'.txt');
@@ -129,8 +130,8 @@ class Language implements ArrayAccess {
 		}
 	}
 	
-	public function includeData($files)
-	{
+	public function includeData($files): void
+    {
 		// Fixed BOM problems.
 		ob_start();
 		$LNG	= array();
@@ -154,7 +155,8 @@ class Language implements ArrayAccess {
 	
 	/** ArrayAccess Functions **/
 	
-    public function offsetSet($offset, $value) {
+    public function offsetSet($offset, $value): void
+    {
         if (is_null($offset)) {
             $this->container[] = $value;
         } else {
@@ -162,15 +164,18 @@ class Language implements ArrayAccess {
         }
     }
 	
-    public function offsetExists($offset) {
+    public function offsetExists($offset): bool
+    {
         return isset($this->container[$offset]);
     }
 	
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset): void
+    {
         unset($this->container[$offset]);
     }
 	
-    public function offsetGet($offset) {
-        return isset($this->container[$offset]) ? $this->container[$offset] : $offset;
+    public function offsetGet($offset): mixed
+    {
+        return $this->container[$offset] ?? $offset;
     }
 }

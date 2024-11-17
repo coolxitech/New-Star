@@ -69,7 +69,7 @@ $LNG['type_planet_2']  					             = 'Debris Field';
 $LNG['type_planet_3']  					             = 'Moon';
 //{IDs_0004} Rights in the game
 $LNG['user_level_0']                                 = 'Player';
-$LNG['user_level_1']                                 = 'Moderator';
+$LNG['user_level_1']                                 = '版主';
 $LNG['user_level_2']                                 = 'Operator';
 $LNG['user_level_3']                                 = 'Administrator';
 //{IDs_0005} General

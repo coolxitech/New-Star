@@ -15,7 +15,7 @@
  * @Basis New-Star: 2Moons v1.8.0
  */
  
-class Theme
+#[AllowDynamicProperties] class Theme
 {
 	static public $Themes;
 	private $THEMESETTINGS;

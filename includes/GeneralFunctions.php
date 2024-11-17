@@ -323,14 +323,14 @@ function CalculateMaxPlanetFields($planet)
 	return $planet['field_max'] + ($planet[$resource[33]] * FIELDS_BY_TERRAFORMER) + ($planet[$resource[41]] * FIELDS_BY_MOONBASIS_LEVEL);
 }
 
-function pretty_time($seconds)
+function pretty_time(int $seconds)
 {
 	global $LNG;
-	
-	$day	= floor($seconds / 86400);
-	$hour	= floor($seconds / 3600 % 24);
-	$minute	= floor($seconds / 60 % 60);
-	$second	= floor($seconds % 60);
+	$day    = intdiv($seconds, 86400);         // 整除计算天数
+    $hour   = intdiv($seconds, 3600) % 24;     // 整除计算小时
+    $minute = intdiv($seconds, 60) % 60;       // 整除计算分钟
+    $second = $seconds % 60;                   // 秒数直接取模
+
 
 	$time  = '';
 
@@ -611,7 +611,7 @@ function exceptionHandler($exception)
 <!--[if IE 9 ]>    <html lang="de" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="de" class="no-js"> <!--<![endif]-->
 <head>
-	<title>'.$gameName.' - '.$errorType[$errno].'</title>
+	<title>'.$gameName.' - '.($errorType[$errno] ?? '').'</title>
 	<meta name="generator" content="2Moons '.$VERSION.'">
 	<!-- 
 		This website is powered by 2Moons '.$VERSION.'
@@ -666,7 +666,7 @@ function exceptionHandler($exception)
 ">
 <table width="960">
 	<tr>
-		<th>'.$errorType[$errno].'</th>
+		<th>'.($errorType[$errno] ?? '').'</th>
 	</tr>
 	<tr>
 		<td class="left">
@@ -686,7 +686,7 @@ function exceptionHandler($exception)
 
 	echo str_replace(array('\\', ROOT_PATH, substr(ROOT_PATH, 0, 15)), array('/', '/', 'FILEPATH '), ob_get_clean());
 	
-	$errorText	= date("[d-M-Y H:i:s]", TIMESTAMP).' '.$errorType[$errno].': "'.strip_tags($exception->getMessage())."\"\r\n";
+	$errorText	= date("[d-M-Y H:i:s]", TIMESTAMP).' '.($errorType[$errno] ?? '').': "'.strip_tags($exception->getMessage())."\"\r\n";
 	$errorText	.= 'File: '.$exception->getFile().' | Line: '.$exception->getLine()."\r\n";
 	$errorText	.= 'URL: '.PROTOCOL.HTTP_HOST.$_SERVER['REQUEST_URI'].' | Version: '.$VERSION."\r\n";
 	$errorText	.= "Stack trace:\r\n";
