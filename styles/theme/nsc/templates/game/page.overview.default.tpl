@@ -188,6 +188,8 @@
                                     <div class="card mr-1 background-border-black-blue"> 
                                         {if isModuleAvailable($smarty.const.MODULE_RACE)}
                                         <a href="game.php?page=race"><div class="overvieew15 overvire tooltip" style="background: rgba(0, 0, 0, 0.25) url({$dpath}gebaeude/{$race}.gif) no-repeat center; background-size: 50px;" data-tooltip-content="{$LNG.tech.$race}"></div></a>
+                                        {else}
+                                            <a href="game.php?page=race"><div class="overvieew15 overvire tooltip" style="background: rgba(0, 0, 0, 0.25) url({$dpath}gebaeude/{$race}.gif) no-repeat center; background-size: 50px;" data-tooltip-content="未知技能"></div></a>
                                         {/if}
                                     </div>
                                 </div>

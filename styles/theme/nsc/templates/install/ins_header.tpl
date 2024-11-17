@@ -52,5 +52,5 @@
         });
 	</script>
 </head>
-<body id="step{$smarty.get.step|htmlspecialchars|default:'intro'}">
+<body id="step{if isset($smarty.get.step)}{$smarty.get.step}{else}intro{/if}">
 <div id="tooltip" class="tip"></div>

@@ -83,6 +83,9 @@
 	<script>{if isset($code)}var loginError = {$code|json};{/if}</script>
 	{block name="script"}{/block}	
 </head>
-
-<body id="{$smarty.get.page|htmlspecialchars|default:'overview'}" class="{$bodyclass}">
-	<div id="tooltip" class="tip"></div>
+{if isset($smarty.get.page) && $smarty.get.page}
+    <body id="{$smarty.get.page|htmlspecialchars|default:'overview'}" class="{$bodyclass}">
+{else}
+    <body id="overview" class="{$bodyclass}">
+{/if}
+    <div id="tooltip" class="tip"></div>

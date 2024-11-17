@@ -10,15 +10,29 @@
                 <div class="mb-3">  
                     <div class="form-group">
                         <label for="host">{$LNG.step1_mysql_server}</label>
-                        <input type="text" name="host" value="{$smarty.get.host|escape:'htmlall'|default:$host}" class="form-control" id="host">
+                        {if isset($smarty.get.host) && $smarty.get.host}
+                            <input type="text" name="host" value="{$smarty.get.host|escape:'htmlall'}" class="form-control" id="host">
+                        {else}
+                            <input type="text" name="host" value="{$host|escape:'htmlall'}" class="form-control" id="host">
+                        {/if}
                     </div>
                     <div class="form-group">
                         <label for="port">{$LNG.step1_mysql_port}</label>
-                        <input type="text" name="port" value="{$smarty.get.port|escape:'htmlall'|default:'3306'}" class="form-control" id="port">
+                        {if isset($smarty.get.host) && $smarty.get.host}
+                            <input type="text" name="port" value="{$smarty.get.port|escape:'htmlall'}" class="form-control" id="port">
+                        {else}
+                            <input type="text" name="port" value="3306" class="form-control" id="port">
+                        {/if}
+
                     </div>
                     <div class="form-group">
                         <label for="user">{$LNG.step1_mysql_dbuser}</label>
-                        <input type="text" name="user" value="{$smarty.get.user|escape:'htmlall'|default:$user}" class="form-control" id="user">
+                        {if isset($smarty.get.user) && $smarty.get.user}
+                           <input type="text" name="user" value="{$smarty.get.user|escape:'htmlall'}" class="form-control" id="user">
+                        {else}
+                            <input type="text" name="user" value="{$user|escape:'htmlall'}" class="form-control" id="user">
+                        {/if}
+
                     </div>
                     <div class="form-group">
                         <label for="password">{$LNG.step1_mysql_dbpass}</label>
@@ -26,11 +40,20 @@
                     </div>
                     <div class="form-group">
                         <label for="dbname">{$LNG.step1_mysql_dbname}</label>
-                        <input type="text" name="dbname" value="{$smarty.get.dbname|escape:'htmlall'|default:$dbname}" class="form-control" id="dbname">
+                        {if isset($smarty.get.dbname) && $smarty.get.dbname}
+                            <input type="text" name="dbname" value="{$smarty.get.dbname|escape:'htmlall'}" class="form-control" id="dbname">
+                        {else}
+                            <input type="text" name="dbname" value="{$dbname|escape:'htmlall'}" class="form-control" id="dbname">
+                        {/if}
+
                     </div>
                     <div class="form-group">
                         <label for="prefix">{$LNG.step1_mysql_prefix}</label>
-                        <input type="text" name="prefix" value="{$smarty.get.prefix|escape:'htmlall'|default:'uni1_'}" class="form-control" id="prefix">
+                        {if isset($smarty.get.prefix) && $smarty.get.prefix}
+                            <input type="text" name="prefix" value="{$smarty.get.prefix|escape:'htmlall'}" class="form-control" id="prefix">
+                        {else}
+                            <input type="text" name="prefix" value="uni1_" class="form-control" id="prefix">
+                        {/if}
                     </div>
                 </div>
                 <button type="submit" name="next" class="btn btn-primary">{$LNG.continue}</button>

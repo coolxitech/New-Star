@@ -72,7 +72,8 @@
 	});
 	</script>
 </head>
-<body id="{$smarty.get.page|htmlspecialchars|default:'overview'}" class="{$bodyclass}" 
+{if isset($smarty.get.page) && $smarty.get.page}
+    <body id="{$smarty.get.page|htmlspecialchars|default:'overview'}" class="{$bodyclass}"
     style="
         background: #0B0B0F;
         background: url({$background}) no-repeat fixed center center #0d0d0d;
@@ -81,4 +82,14 @@
         o-background-size: cover;
         background-size: cover;
 ">
+{else}
+    <body id="overview" class="{$bodyclass}" style="
+        background: #0B0B0F;
+        background: url({$background}) no-repeat fixed center center #0d0d0d;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        o-background-size: cover;
+        background-size: cover;
+">
+{/if}
 <div id="tooltip" class="tip"></div>
