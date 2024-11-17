@@ -24,7 +24,7 @@ class ShowStatUpdatePage extends AbstractAdminPage
         if (!allowedTo(str_replace(array(dirname(__FILE__), '\\', '/', '.php'), '', __FILE__))) throw new Exception("Permission error!");
 		parent::__construct();
 	}
-		
+
 	function show()
 	{
         global $LNG;
