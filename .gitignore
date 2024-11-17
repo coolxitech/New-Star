@@ -3,3 +3,5 @@
 /includes/config.php
 /includes/FIRST_INSTALL
 /includes/error.log
+/vendor
+composer.lock
