@@ -42,7 +42,7 @@ class FacebookApiException extends Exception
   public function __construct($result) {
     $this->result = $result;
 
-    $code = isset($result['error_code']) ? $result['error_code'] : 0;
+    $code = $result['error_code'] ?? 0;
 
     if (isset($result['error_description'])) {
       // OAuth 2.0 Draft 10 style
@@ -65,7 +65,8 @@ class FacebookApiException extends Exception
    *
    * @return array The result from the API server
    */
-  public function getResult() {
+  public function getResult(): array
+  {
     return $this->result;
   }
 
@@ -75,7 +76,8 @@ class FacebookApiException extends Exception
    *
    * @return string
    */
-  public function getType() {
+  public function getType(): string
+  {
     if (isset($this->result['error'])) {
       $error = $this->result['error'];
       if (is_string($error)) {
@@ -120,37 +122,37 @@ abstract class BaseFacebook
   /**
    * Version.
    */
-  const VERSION = '3.2.2';
+  const string VERSION = '3.2.2';
 
   /**
    * Signed Request Algorithm.
    */
-  const SIGNED_REQUEST_ALGORITHM = 'HMAC-SHA256';
+  const string SIGNED_REQUEST_ALGORITHM = 'HMAC-SHA256';
 
   /**
    * Default options for curl.
    */
-  public static $CURL_OPTS = array(
-    CURLOPT_CONNECTTIMEOUT => 10,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_TIMEOUT        => 60,
-    CURLOPT_USERAGENT      => 'facebook-php-3.2',
-  );
+  public static array $CURL_OPTS = [
+      CURLOPT_CONNECTTIMEOUT => 10,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_TIMEOUT        => 60,
+      CURLOPT_USERAGENT      => 'facebook-php-3.2',
+  ];
 
   /**
    * List of query parameters that get automatically dropped when rebuilding
    * the current URL.
    */
-  protected static $DROP_QUERY_PARAMS = array(
-    'code',
-    'state',
-    'signed_request',
-  );
+  protected static array $DROP_QUERY_PARAMS = [
+      'code',
+      'state',
+      'signed_request',
+  ];
 
   /**
    * Maps aliases to Facebook domains.
    */
-  public static $DOMAIN_MAP = array(
+  public static array $DOMAIN_MAP = array(
     'api'         => 'https://api.facebook.com/',
     'api_video'   => 'https://api-video.facebook.com/',
     'api_read'    => 'https://api-read.facebook.com/',
@@ -164,31 +166,31 @@ abstract class BaseFacebook
    *
    * @var string
    */
-  protected $appId;
+  protected string $appId;
 
   /**
    * The Application App Secret.
    *
    * @var string
    */
-  protected $appSecret;
+  protected string $appSecret;
 
   /**
    * The ID of the Facebook user, or 0 if the user is logged out.
    *
    * @var integer
    */
-  protected $user;
+  protected int $user;
 
   /**
    * The data from the signed_request token.
    */
-  protected $signedRequest;
+  protected string|array|null $signedRequest;
 
   /**
    * A CSRF state variable to assist in the defense against CSRF attacks.
    */
-  protected $state;
+  protected mixed $state;
 
   /**
    * The OAuth access token received in exchange for a valid authorization
@@ -196,21 +198,21 @@ abstract class BaseFacebook
    *
    * @var string
    */
-  protected $accessToken = null;
+  protected ?string $accessToken = null;
 
   /**
    * Indicates if the CURL based @ syntax for file uploads is enabled.
    *
    * @var boolean
    */
-  protected $fileUploadSupport = false;
+  protected bool $fileUploadSupport = false;
 
   /**
    * Indicates if we trust HTTP_X_FORWARDED_* headers.
    *
    * @var boolean
    */
-  protected $trustForwarded = false;
+  protected bool $trustForwarded = false;
 
   /**
    * Initialize a Facebook Application.
@@ -222,7 +224,7 @@ abstract class BaseFacebook
    *
    * @param array $config The application configuration
    */
-  public function __construct($config) {
+  public function __construct(array $config) {
     $this->setAppId($config['appId']);
     $this->setAppSecret($config['secret']);
     if (isset($config['fileUpload'])) {
@@ -243,7 +245,8 @@ abstract class BaseFacebook
    * @param string $appId The Application ID
    * @return BaseFacebook
    */
-  public function setAppId($appId) {
+  public function setAppId(string $appId): static
+  {
     $this->appId = $appId;
     return $this;
   }
@@ -253,7 +256,8 @@ abstract class BaseFacebook
    *
    * @return string the Application ID
    */
-  public function getAppId() {
+  public function getAppId(): string
+  {
     return $this->appId;
   }
 
@@ -264,7 +268,8 @@ abstract class BaseFacebook
    * @return BaseFacebook
    * @deprecated
    */
-  public function setApiSecret($apiSecret) {
+  public function setApiSecret(string $apiSecret): static
+  {
     $this->setAppSecret($apiSecret);
     return $this;
   }
@@ -275,7 +280,8 @@ abstract class BaseFacebook
    * @param string $appSecret The App Secret
    * @return BaseFacebook
    */
-  public function setAppSecret($appSecret) {
+  public function setAppSecret(string $appSecret): static
+  {
     $this->appSecret = $appSecret;
     return $this;
   }
@@ -286,7 +292,8 @@ abstract class BaseFacebook
    * @return string the App Secret
    * @deprecated
    */
-  public function getApiSecret() {
+  public function getApiSecret(): string
+  {
     return $this->getAppSecret();
   }
 
@@ -295,7 +302,8 @@ abstract class BaseFacebook
    *
    * @return string the App Secret
    */
-  public function getAppSecret() {
+  public function getAppSecret(): string
+  {
     return $this->appSecret;
   }
 
@@ -305,7 +313,8 @@ abstract class BaseFacebook
    * @param boolean $fileUploadSupport The file upload support status.
    * @return BaseFacebook
    */
-  public function setFileUploadSupport($fileUploadSupport) {
+  public function setFileUploadSupport(bool $fileUploadSupport): static
+  {
     $this->fileUploadSupport = $fileUploadSupport;
     return $this;
   }
@@ -315,7 +324,8 @@ abstract class BaseFacebook
    *
    * @return boolean true if and only if the server supports file upload.
    */
-  public function getFileUploadSupport() {
+  public function getFileUploadSupport(): bool
+  {
     return $this->fileUploadSupport;
   }
 
@@ -326,7 +336,8 @@ abstract class BaseFacebook
    *
    * @return boolean true if and only if the server supports file upload.
    */
-  public function useFileUploadSupport() {
+  public function useFileUploadSupport(): bool
+  {
     return $this->getFileUploadSupport();
   }
 
@@ -338,7 +349,8 @@ abstract class BaseFacebook
    * @param string $access_token an access token.
    * @return BaseFacebook
    */
-  public function setAccessToken($access_token) {
+  public function setAccessToken(string $access_token): static
+  {
     $this->accessToken = $access_token;
     return $this;
   }
@@ -395,7 +407,8 @@ abstract class BaseFacebook
    *
    * @return string The access token
    */
-  public function getAccessToken() {
+  public function getAccessToken(): ?string
+  {
     if ($this->accessToken !== null) {
       // we've done this already and cached it.  Just return.
       return $this->accessToken;
@@ -423,7 +436,8 @@ abstract class BaseFacebook
    * @return string A valid user access token, or false if one
    *                could not be determined.
    */
-  protected function getUserAccessToken() {
+  protected function getUserAccessToken(): false|string
+  {
     // first, consider a signed request if it's supplied.
     // if there is a signed request, then it alone determines
     // the access token.
@@ -486,7 +500,8 @@ abstract class BaseFacebook
    *
    * @return string the signed request, if available, or null otherwise.
    */
-  public function getSignedRequest() {
+  public function getSignedRequest(): array|string|null
+  {
     if (!$this->signedRequest) {
       if (!empty($_REQUEST['signed_request'])) {
         $this->signedRequest = $this->parseSignedRequest(
