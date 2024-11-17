@@ -15,6 +15,9 @@
  * @Basis New-Star: 2Moons v1.8.0
  */
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
+
 class ShowUniversePage extends AbstractAdminPage
 {
 	public static $requireModule = 0;
@@ -102,39 +105,30 @@ class ShowUniversePage extends AbstractAdminPage
             case 'create':
                 $universeCount = count(Universe::availableUniverses());
                 // Check Multiuniverse Support
-                $ch	= curl_init();
-                if($universeCount == 1)
-                {
-                    curl_setopt($ch, CURLOPT_URL, PROTOCOL.HTTP_HOST.HTTP_BASE."uni".ROOT_UNI."/");
+                $client = new Client([
+//                    'timeout' => 10,
+                    'allow_redirects' => false,
+                    'headers' => [
+                        'user-agent' => "Mozilla/5.0 (compatible; 2Moons/".Config::get()->VERSION."; +http://2moons.cc)",
+                    ],
+                    'verify' => false,
+                ]);
+                try {
+                    $response = $client->request('GET', $universeCount == 1 ? PROTOCOL . HTTP_HOST . HTTP_BASE . "uni" . ROOT_UNI . "/" : PROTOCOL . HTTP_HOST . HTTP_BASE);
+                } catch (BadResponseException $e) {
+                    $response = $e->getResponse();
                 }
-                else
-                {
-                    curl_setopt($ch, CURLOPT_URL, PROTOCOL.HTTP_HOST.HTTP_BASE);
-                }
-                curl_setopt($ch, CURLOPT_HTTPGET, true);
-                curl_setopt($ch, CURLOPT_AUTOREFERER, true);
-                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (compatible; 2Moons/".Config::get()->VERSION."; +http://2moons.cc)");
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                    "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                    "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3",
-                    "Accept-Language: de-DE,de;q=0.8,en-US;q=0.6,en;q=0.4",
-                ));
-                curl_exec($ch);
-                $httpCode	= curl_getinfo($ch, CURLINFO_HTTP_CODE);
-			
-                curl_close($ch);
+                $httpCode	= $response->getStatusCode();
                 if($httpCode != 302)
                 {
                     $this->printMessage((str_replace(
-                        array(
+                        [
                             '{NGINX-CODE}'
-                        ), 
-                        array(
+                        ],
+                        [
                             #'rewrite '.HTTP_ROOT.'uni[0-9]+/?(.*)?$ '.HTTP_ROOT.'$2 break;'
                             'rewrite /(.*)/?uni[0-9]+/?(.*) /$1/$2 break;'
-                        ),
+                        ],
                         $LNG->getTemplate('createUniverseInfo')
                     )
                     .'<a href="javascript:window.history.back();"><button class="btn btn-primary">'.$LNG['uvs_back'].'</button></a>
@@ -142,7 +136,7 @@ class ShowUniversePage extends AbstractAdminPage
                     .'<a href="javascript:window.location.reload();"><button class="btn btn-primary">'.$LNG['uvs_reload'].'</button></a>
                     '),
                     true,
-                    array('?page=universe', 3600));
+                    ['?page=universe', 3600]);
 
                 }
 
